@@ -1,0 +1,382 @@
+﻿diff --git a/frontend/src/pages/TruckDashboard.jsx b/frontend/src/pages/TruckDashboard.jsx
+index 45d6414..c1af9ce 100644
+--- a/frontend/src/pages/TruckDashboard.jsx
++++ b/frontend/src/pages/TruckDashboard.jsx
+@@ -14,6 +14,7 @@ import {
+ } from 'recharts'
+ import { useFleetStore } from '../state/FleetContext.jsx'
+ import FleetMap from '../components/FleetMap.jsx'
++import DashboardLayout from '../components/DashboardLayout.jsx'
+ import { Zap, AlertCircle, CheckCircle } from 'lucide-react'
+ 
+ const API_URL = 'http://127.0.0.1:5000/data'
+@@ -58,15 +59,15 @@ function tooltipContent({ active, payload, label }) {
+   if (!active || !payload?.length) return null
+   const p = payload[0]?.payload
+   return (
+-    <div className="tooltip">
+-      <div className="tooltip__t">Time: {label}</div>
+-      <div className="tooltip__row">
+-        <span className="tooltip__k">score</span>
+-        <span className="tooltip__v">{typeof p?.rashness_score === 'number' ? p.rashness_score.toFixed(2) : 'ÔÇö'}</span>
++    <div className="bg-white border border-slate-200 shadow-lg rounded-lg p-3 text-sm min-w-[140px]">
++      <div className="text-slate-500 font-bold mb-2 border-b border-slate-100 pb-2 uppercase tracking-wider text-xs">Time: {label}</div>
++      <div className="flex justify-between items-center gap-4 mb-2">
++        <span className="text-slate-400 font-medium tracking-wide">score</span>
++        <span className="text-slate-900 font-black">{typeof p?.rashness_score === 'number' ? p.rashness_score.toFixed(2) : 'ÔÇö'}</span>
+       </div>
+-      <div className="tooltip__row">
+-        <span className="tooltip__k">event</span>
+-        <span className="tooltip__v">{p?.event || 'ÔÇö'}</span>
++      <div className="flex justify-between items-center gap-4">
++        <span className="text-slate-400 font-medium tracking-wide">event</span>
++        <span className="text-slate-700 font-bold text-xs bg-slate-100 px-1.5 py-0.5 rounded">{p?.event || 'ÔÇö'}</span>
+       </div>
+     </div>
+   )
+@@ -354,200 +355,204 @@ export default function TruckDashboard() {
+ 
+   if (!truck) {
+     return (
+-      <div className="page fade-in">
+-        <header className="topbar">
+-          <div>
+-            <div className="kicker">Truck</div>
+-            <h1 className="title">Truck not found</h1>
+-          </div>
+-          <Link className="btn btn--ghost" to="/fleets">
+-            ÔåÉ Back to Fleets
+-          </Link>
+-        </header>
+-      </div>
++      <DashboardLayout activeItem="Fleets" breadcrumbs={
++        <>
++          <span className="text-slate-500 font-semibold tracking-wide uppercase">TRUCK</span>
++          <span className="mx-2 text-slate-300">/</span>
++          <span className="text-slate-800 font-semibold tracking-wide uppercase">Not Found</span>
++        </>
++      }>
++        <div className="p-8 w-full max-w-[1400px] mx-auto flex-1">
++           <div className="bg-red-50 p-4 rounded-xl border border-red-200 text-red-900 font-bold">Truck not found</div>
++           <Link className="mt-4 inline-block px-5 py-2.5 rounded-lg border border-slate-200 bg-white" to="/fleets">ÔåÉ Back</Link>
++        </div>
++      </DashboardLayout>
+     )
+   }
+ 
++  const breadcrumbs = (
++    <>
++      <span className="text-slate-500 font-semibold tracking-wide uppercase">FLEET MANAGEMENT</span>
++      <span className="mx-2 text-slate-300">/</span>
++      <Link to={fleet ? `/fleet/${fleet.id}` : '/fleets'} className="text-slate-500 hover:text-slate-800 font-semibold tracking-wide uppercase transition-colors">{fleet?.name || 'Fleet'}</Link>
++      <span className="mx-2 text-slate-300">/</span>
++      <span className="text-slate-800 font-semibold tracking-wide uppercase">Truck {truck.id}</span>
++    </>
++  )
++
+   return (
+-    <div className="fade-in">
+-      <div className="page">
+-        <header className="topbar">
+-          <div>
+-            <div className="kicker">
+-              <Link className="link" to={fleet ? `/fleet/${fleet.id}` : '/fleets'}>
+-                ÔåÉ Back to Fleet
+-              </Link>
++    <DashboardLayout activeItem="Fleets" breadcrumbs={breadcrumbs}>
++      <div className="p-8 w-full max-w-[1400px] mx-auto flex-1 flex flex-col overflow-y-auto">
++        <div className="flex justify-between items-end mb-8">
++            <div>
++              <div className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">
++                Micro View ÔÇó Vehicle Telemetry
++              </div>
++              <h1 className="text-4xl leading-none font-black text-slate-900 tracking-tighter" style={{ fontStretch: 'expanded' }}>
++                Truck {truck.id} <span className="text-slate-400 font-medium tracking-normal text-2xl">ÔÇó {truck.driverName}</span>
++              </h1>
+             </div>
+-            <h1 className="title">
+-              Truck {truck.id} <span className="muted">ÔÇó {truck.driverName}</span>
+-            </h1>
+-          </div>
+-          <div className="actions-inline">
+-            <div className="pill">
+-              <span className="pill__k">Fleet</span>
+-              <span className="pill__v">{fleet?.name || 'ÔÇö'}</span>
++            
++            <div className="flex items-center gap-3">
++              <div className="px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 flex items-center gap-2">
++                 <span className="text-slate-400 text-xs font-bold uppercase">Fleet</span>
++                 <span className="text-slate-900 font-bold text-sm">{fleet?.name || 'ÔÇö'}</span>
++              </div>
+             </div>
+-          </div>
+-        </header>
++        </div>
+ 
+-        {error ? <div className="error">{error}</div> : null}
++        {error ? <div className="w-full bg-red-50 text-red-700 p-4 rounded-xl border border-red-200 mb-6 font-bold">{error}</div> : null}
+ 
+-        <section className="grid grid--truck-top">
+-          <div className={`card panel panel--${tripTone}`}>
+-            <div className="panel__k">Trip Rating (Live)</div>
+-            <div className="panel__v">
+-              {typeof tripRating === 'number' ? fmt1(tripRating) : 'ÔÇö'}
+-              <span className="metric__unit">/ 10</span>
++        {/* Top metrics */}
++        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
++          <div className={`bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative p-6`}>
++            <div className={`absolute top-0 left-0 w-full h-1.5 ${tripTone === 'green' ? 'bg-emerald-500' : tripTone === 'yellow' ? 'bg-yellow-500' : tripTone === 'red' ? 'bg-pink-500' : 'bg-slate-300'}`}></div>
++            <div className="text-slate-500 font-bold text-sm tracking-wide uppercase mb-2">Trip Rating (Live)</div>
++            <div className="text-4xl font-black text-slate-800 mb-1" style={{ fontStretch: 'expanded' }}>
++               {typeof tripRating === 'number' ? fmt1(tripRating) : 'ÔÇö'} <span className="text-lg text-slate-400">/ 10</span>
+             </div>
+-            <div className="panel__sub">Rolling avg (last 2 minutes)</div>
++            <div className="text-slate-400 text-xs font-medium">Rolling avg (last 2 mins)</div>
+           </div>
+ 
+-          <div className="card panel panel--neutral">
+-            <div className="panel__k">Driver Rating (Overall)</div>
+-            <div className="panel__v">
+-              {fmt1(mock.driverRating)}
+-              <span className="metric__unit">/ 10</span>
++          <div className={`bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative p-6`}>
++            <div className={`absolute top-0 left-0 w-full h-1.5 bg-slate-300`}></div>
++            <div className="text-slate-500 font-bold text-sm tracking-wide uppercase mb-2">Driver Rating</div>
++            <div className="text-4xl font-black text-slate-800 mb-1" style={{ fontStretch: 'expanded' }}>
++               {fmt1(mock.driverRating)} <span className="text-lg text-slate-400">/ 10</span>
+             </div>
+-            <div className="panel__sub">Mock history across past trips</div>
++            <div className="text-slate-400 text-xs font-medium">Mock history</div>
+           </div>
+ 
+-          <div className="card panel panel--neutral">
+-            <div className="panel__k">Continuous Driving Time</div>
+-            <div className="panel__v">{secondsToHm(driveSeconds)}</div>
+-            <div className="panel__sub">Simulated increment</div>
++          <div className={`bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative p-6`}>
++            <div className={`absolute top-0 left-0 w-full h-1.5 bg-slate-300`}></div>
++            <div className="text-slate-500 font-bold text-sm tracking-wide uppercase mb-2">Driving Time</div>
++            <div className="text-4xl font-black text-slate-800 mb-1" style={{ fontStretch: 'expanded' }}>
++               {secondsToHm(driveSeconds)} 
++            </div>
++            <div className="text-slate-400 text-xs font-medium">Simulated increment</div>
+           </div>
+ 
+-          <div className={`card panel panel--${status.tone}`}>
+-            <div className="panel__k">Status</div>
+-            <div className="panel__v">
+-              <span className={`chip chip--${status.tone}`}>{status.label}</span>
++          <div className={`bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative p-6`}>
++            <div className={`absolute top-0 left-0 w-full h-1.5 ${status.tone === 'green' ? 'bg-emerald-500' : status.tone === 'yellow' ? 'bg-yellow-500' : status.tone === 'red' ? 'bg-pink-500' : 'bg-slate-300'}`}></div>
++            <div className="text-slate-500 font-bold text-sm tracking-wide uppercase mb-2">Status</div>
++            <div className="mt-2 mb-1">
++               <span className={`px-3 py-1 rounded-full text-sm font-bold ${status.tone === 'green' ? 'bg-emerald-100 text-emerald-700' : status.tone === 'yellow' ? 'bg-yellow-100 text-yellow-700' : status.tone === 'red' ? 'bg-pink-100 text-pink-700' : 'bg-slate-100 text-slate-700'}`}>{status.label}</span>
+             </div>
+-            <div className="panel__sub">Based on live impact score</div>
++            <div className="text-slate-400 text-xs font-medium mt-3">Live impact score</div>
+           </div>
+         </section>
+ 
+-        <section style={{ margin: '2rem 0' }}>
++        <section className="mb-8 h-[400px] w-full rounded-2xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 relative z-0">
+           <FleetMap activeTruckId={truck?.id} />
+         </section>
+ 
+-        <section className="grid grid--truck-second">
+-          <div className="card panel panel--neutral">
+-            <div className="panel__k">Total Trips</div>
+-            <div className="panel__v">{mock.totalTrips}</div>
+-            <div className="panel__sub">Driver history (mock)</div>
+-          </div>
+-          <div className="card panel panel--neutral">
+-            <div className="panel__k">Trips on Same Route</div>
+-            <div className="panel__v">{mock.routeTrips}</div>
+-            <div className="panel__sub">
+-              {fleet ? `${fleet.sourceLocation?.name || fleet.source || 'Start'} ÔåÆ ${fleet.destinationLocation?.name || fleet.destination || 'End'}` : 'Current route'}
+-            </div>
+-          </div>
++        <section className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-6 mb-8 w-full">
++           <div className="flex justify-between items-end mb-6">
++             <div>
++               <div className="text-slate-900 font-black text-xl tracking-tight">Trip Safety Score (Live)</div>
++               <div className="text-slate-400 text-sm font-medium mt-1">High-risk spikes highlighted (score &gt; 7)</div>
++             </div>
++             
++             <div className="flex gap-4 text-xs font-bold text-slate-400 uppercase tracking-widest text-right">
++               <div>Latest event: <span className="text-slate-700 ml-1">{latest?.event || 'ÔÇö'}</span></div>
++               <div>Points: <span className="text-slate-700 ml-1">{points.length}/120</span></div>
++             </div>
++           </div>
++           
++           <ResponsiveContainer width="100%" height={320}>
++             <LineChart data={points} margin={{ top: 5, right: 12, bottom: 0, left: 0 }}>
++               <CartesianGrid stroke="#f1f5f9" vertical={false} />
++               <ReferenceArea y1={7} y2={10} fill="rgba(251, 113, 133, 0.1)" strokeOpacity={0} />
++               <XAxis
++                 dataKey="time"
++                 tick={{ fill: '#94a3b8', fontSize: 12, fontWeight: 600 }}
++                 tickLine={false}
++                 axisLine={false}
++                 minTickGap={18}
++               />
++               <YAxis
++                 tick={{ fill: '#94a3b8', fontSize: 12, fontWeight: 600 }}
++                 tickLine={false}
++                 axisLine={false}
++                 width={32}
++                 domain={[0, 10]}
++               />
++               <Tooltip content={tooltipContent} />
++               <Line
++                 type="monotone"
++                 dataKey="rashness_score"
++                 stroke="#3b82f6"
++                 strokeWidth={2.5}
++                 dot={false}
++                 isAnimationActive={false}
++               />
++               <Scatter
++                 data={dangerPoints}
++                 dataKey="rashness_score"
++                 fill="#f43f5e"
++                 isAnimationActive={false}
++               />
++             </LineChart>
++           </ResponsiveContainer>
+         </section>
+ 
+-        <section className="stack">
+-          <div className="card chart">
+-            <div className="card__header">
+-              <div className="card__title">Trip Safety Score (live)</div>
+-              <div className="card__subtitle">High-risk spikes highlighted (score &gt; 7)</div>
+-            </div>
+-            <div className="chart__body">
+-              <ResponsiveContainer width="100%" height={320}>
+-                <LineChart data={points} margin={{ top: 5, right: 12, bottom: 0, left: 0 }}>
+-                  <CartesianGrid stroke="rgba(255,255,255,0.08)" vertical={false} />
+-                  <ReferenceArea y1={7} y2={10} fill="rgba(251, 113, 133, 0.08)" strokeOpacity={0} />
+-                  <XAxis
+-                    dataKey="time"
+-                    tick={{ fill: 'rgba(255,255,255,0.6)', fontSize: 12 }}
+-                    tickLine={false}
+-                    axisLine={false}
+-                    minTickGap={18}
+-                  />
+-                  <YAxis
+-                    tick={{ fill: 'rgba(255,255,255,0.6)', fontSize: 12 }}
+-                    tickLine={false}
+-                    axisLine={false}
+-                    width={32}
+-                    domain={[0, 10]}
+-                  />
+-                  <Tooltip content={tooltipContent} />
+-                  <Line
+-                    type="monotone"
+-                    dataKey="rashness_score"
+-                    stroke="rgba(96, 165, 250, 0.95)"
+-                    strokeWidth={2.25}
+-                    dot={false}
+-                    isAnimationActive={false}
+-                  />
+-                  <Scatter
+-                    data={dangerPoints}
+-                    dataKey="rashness_score"
+-                    fill="rgba(251, 113, 133, 0.95)"
+-                    isAnimationActive={false}
+-                  />
+-                </LineChart>
+-              </ResponsiveContainer>
+-            </div>
+-          </div>
+-
+-          <div className="footer-row">
+-            <div className="muted">
+-              Latest event: <span className="mono">{latest?.event || 'ÔÇö'}</span>
+-            </div>
+-            <div className="muted">Points: {points.length}/120</div>
+-          </div>
+-        </section>
+-
+-        <section className="actions actions--bottom">
++        <section className="flex flex-col md:flex-row gap-4 w-full mb-8">
+           {!truckArrived ? (
+             <>
+-              <div className="flex items-center gap-3 px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg flex-grow">
+-                <Zap className="w-5 h-5 text-blue-600 animate-pulse" />
++              <div className="flex items-center gap-3 px-5 py-4 bg-blue-50 border border-blue-200 rounded-xl flex-grow shadow-sm">
++                <Zap className="w-6 h-6 text-blue-600 animate-pulse" />
+                 <div>
+-                  <p className="text-sm font-semibold text-blue-900">Delivery in Progress</p>
+-                  <p className="text-xs text-blue-700">Progress: {currentProgress.toFixed(1)}% ÔÇó Delivery #{deliveryId?.toUpperCase().slice(0, 8)}</p>
++                  <p className="text-base font-bold text-blue-900 tracking-tight">Delivery in Progress</p>
++                  <p className="text-sm font-medium text-blue-700 mt-0.5">Progress: {currentProgress.toFixed(1)}% ÔÇó Delivery #{deliveryId?.toUpperCase().slice(0, 8)}</p>
+                 </div>
+               </div>
+-              <button className="btn" onClick={() => setCallOpen(true)}>
++              <button 
++                className="px-6 py-4 bg-slate-900 border border-slate-800 text-white font-bold rounded-xl shadow-sm hover:bg-slate-800 transition-colors"
++                onClick={() => setCallOpen(true)}
++              >
+                 ­ƒô× Call Driver
+               </button>
+             </>
+           ) : !allTrucksArrived ? (
+-            <div className="flex items-center gap-3 px-4 py-3 bg-yellow-50 border border-yellow-200 rounded-lg flex-grow">
+-              <CheckCircle className="w-5 h-5 text-yellow-600 animate-pulse" />
++            <div className="flex items-center gap-3 px-5 py-4 bg-yellow-50 border border-yellow-200 rounded-xl flex-grow shadow-sm">
++              <CheckCircle className="w-6 h-6 text-yellow-600 animate-pulse" />
+               <div>
+-                <p className="text-sm font-semibold text-yellow-900">Ô£ô This Truck Arrived</p>
+-                <p className="text-xs text-yellow-700">Waiting for other trucks to arrive...</p>
++                <p className="text-base font-bold text-yellow-900 tracking-tight">Ô£ô This Truck Arrived</p>
++                <p className="text-sm font-medium text-yellow-700 mt-0.5">Waiting for other trucks to arrive...</p>
+               </div>
+             </div>
+           ) : (
+-            <div className="flex items-center gap-3 px-4 py-3 bg-green-50 border border-green-200 rounded-lg flex-grow">
+-              <CheckCircle className="w-5 h-5 text-green-600" />
++            <div className="flex items-center gap-3 px-5 py-4 bg-emerald-50 border border-emerald-200 rounded-xl flex-grow shadow-sm">
++              <CheckCircle className="w-6 h-6 text-emerald-600" />
+               <div>
+-                <p className="text-sm font-semibold text-green-900">Ô£à All Trucks Arrived - Delivery Complete!</p>
+-                <p className="text-xs text-green-700">Redirecting to analytics...</p>
++                <p className="text-base font-bold text-emerald-900 tracking-tight">Ô£à All Trucks Arrived</p>
++                <p className="text-sm font-medium text-emerald-700 mt-0.5">Redirecting to analytics...</p>
+               </div>
+             </div>
+           )}
+         </section>
+ 
+         {callOpen ? (
+-          <div className="modal-overlay" onClick={() => setCallOpen(false)} role="presentation">
+-            <div className="modal card" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+-              <div className="modal__title">Calling DriverÔÇª</div>
+-              <div className="modal__body muted">
+-                Connecting to <span className="mono">{truck.driverName}</span> ({truck.id})
++          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setCallOpen(false)}>
++            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden" onClick={e => e.stopPropagation()}>
++              <div className="p-8">
++                <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-6 mx-auto">
++                   <div className="animate-pulse flex items-center justify-center">­ƒô×</div>
++                </div>
++                <div className="text-2xl font-black text-slate-900 tracking-tight mb-2 text-center">Calling DriverÔÇª</div>
++                <div className="text-slate-500 font-medium text-center">Connecting to <span className="text-slate-800 font-bold">{truck.driverName}</span></div>
+               </div>
+-              <div className="modal__actions">
+-                <button className="btn btn--secondary" onClick={() => setCallOpen(false)}>
++              <div className="bg-slate-50 border-t border-slate-100 p-4 flex justify-center">
++                <button className="px-8 py-3 bg-red-500 text-white font-bold rounded-xl shadow-sm hover:bg-red-600 transition-colors w-full" onClick={() => setCallOpen(false)}>
+                   End Call
+                 </button>
+               </div>
+             </div>
+           </div>
+         ) : null}
++
+       </div>
+-    </div>
++    </DashboardLayout>
+   )
+ }
+ 

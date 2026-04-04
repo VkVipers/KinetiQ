@@ -1,0 +1,103 @@
+﻿commit c3f5cb17d859c1a41b87c82b59aa3872210e38f3
+Author: Shriyam-Avasthi <avasthishriyam@gmail.com>
+Date:   Sat Apr 4 04:12:07 2026 +0530
+
+    Further improve routing and map logic
+
+diff --git a/frontend/src/pages/FleetDetails.jsx b/frontend/src/pages/FleetDetails.jsx
+index ecc8520..93bbbc4 100644
+--- a/frontend/src/pages/FleetDetails.jsx
++++ b/frontend/src/pages/FleetDetails.jsx
+@@ -48,7 +48,7 @@ export default function FleetDetails() {
+           <div className="kicker">Meso View</div>
+           <h1 className="title">{fleet.name}</h1>
+           <div className="muted">
+-            {fleet.source} ÔåÆ {fleet.destination} ÔÇó ETA {fleet.eta}
++            {fleet.sourceLocation?.name || fleet.source || 'Start'} ÔåÆ {fleet.destinationLocation?.name || fleet.destination || 'End'} ÔÇó ETA {fleet.eta || 'ÔÇö'}
+           </div>
+         </div>
+         <div className="actions-inline">
+
+commit f62c7e66726b49a57fe685f34f14ca95505c2c13
+Author: Atchyut Bhallamudi <atchyutbhallamudi@gmail.com>
+Date:   Fri Apr 3 17:13:14 2026 +0530
+
+    Add frontend & backend
+
+diff --git a/frontend/src/pages/FleetDetails.jsx b/frontend/src/pages/FleetDetails.jsx
+new file mode 100644
+index 0000000..ecc8520
+--- /dev/null
++++ b/frontend/src/pages/FleetDetails.jsx
+@@ -0,0 +1,71 @@
++import { Link, useParams } from 'react-router-dom'
++import TruckRow from '../components/TruckRow.jsx'
++import { useFleetStore } from '../state/FleetContext.jsx'
++
++function riskFromRashness(rash) {
++  if (typeof rash !== 'number') return 'ÔÇö'
++  if (rash < 3) return 'Low'
++  if (rash <= 6) return 'Medium'
++  return 'High'
++}
++
++function fakeCoords(truckId) {
++  // Stable fake coords per truck ID (no map required)
++  let h = 0
++  for (let i = 0; i < truckId.length; i++) h = (h * 31 + truckId.charCodeAt(i)) % 10000
++  const lat = (25.05 + (h % 120) / 1000).toFixed(4)
++  const lon = (55.10 + ((h / 2) % 120) / 1000).toFixed(4)
++  return `${lat}, ${lon}`
++}
++
++export default function FleetDetails() {
++  const { id } = useParams()
++  const { fleets, trucks, truckTelemetry } = useFleetStore()
++
++  const fleet = fleets.find((f) => f.id === id)
++  const fleetTrucks = trucks.filter((t) => t.fleetId === id)
++
++  if (!fleet) {
++    return (
++      <div className="page fade-in">
++        <header className="topbar">
++          <div>
++            <div className="kicker">Fleet</div>
++            <h1 className="title">Fleet not found</h1>
++          </div>
++          <Link className="btn btn--ghost" to="/fleets">
++            ÔåÉ Back to Fleets
++          </Link>
++        </header>
++      </div>
++    )
++  }
++
++  return (
++    <div className="page fade-in">
++      <header className="topbar">
++        <div>
++          <div className="kicker">Meso View</div>
++          <h1 className="title">{fleet.name}</h1>
++          <div className="muted">
++            {fleet.source} ÔåÆ {fleet.destination} ÔÇó ETA {fleet.eta}
++          </div>
++        </div>
++        <div className="actions-inline">
++          <Link className="btn btn--ghost" to="/fleets">
++            ÔåÉ Back to Fleets
++          </Link>
++        </div>
++      </header>
++
++      <section className="truck-list">
++        {fleetTrucks.map((t) => {
++          const rash = truckTelemetry?.[t.id]?.rashness_score
++          const risk = riskFromRashness(rash)
++          return <TruckRow key={t.id} truck={t} risk={risk} coords={fakeCoords(t.id)} />
++        })}
++      </section>
++    </div>
++  )
++}
++
