@@ -21,13 +21,13 @@ Crowdsourcing Infrastructure: We turn existing delivery fleets into active, real
 
 ## Core Outcomes
 
-    Cargo-Aware Dynamic Routing: We match the route to the freight. Fragile shipments are directed along paths with the lowest historical "jitter scores," while durable goods take the fastest available paths. 
+Cargo-Aware Dynamic Routing: We match the route to the freight. Fragile shipments are directed along paths with the lowest historical "jitter scores," while durable goods take the fastest available paths. 
 
-    The Driver Trust Network: We generate a "Driver Reliability Score" based strictly on preventable actions (e.g., sudden braking on a known smooth road). This provides fine-grained, fair analytics to streamline hiring, reduce turnover, and reward good driving. 
+The Driver Trust Network: We generate a "Driver Reliability Score" based strictly on preventable actions (e.g., sudden braking on a known smooth road). This provides fine-grained, fair analytics to streamline hiring, reduce turnover, and reward good driving. 
 
 ## Technology Stack
 
-    Hardware / Edge: Microcontroller (ESP32), 6-axis IMU, GPS Module, Camera Module 
+Hardware / Edge: Microcontroller (ESP32), 6-axis IMU, GPS Module, Camera Module 
 
     Data & Cloud: MQTT protocol, AWS/GCP hosting, Time-Series Database (InfluxDB) 
 
