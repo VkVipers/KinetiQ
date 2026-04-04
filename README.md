@@ -13,11 +13,11 @@ Right now, most tracking systems can only tell you if your goods got bumped duri
 KinetiQ deploys an intelligent telematics system that combines edge IoT data with fleet-wide cloud analytics to separate road-induced anomalies from driver-induced anomalies. We are moving the industry away from absolute metrics to contextual accountability. 
 How it Works: The Mechanism
 
-    Data Capture: A lightweight IoT device (IMU + GPS) tracks vertical jolts, harsh braking, and sharp cornering. 
+Data Capture: A lightweight IoT device (IMU + GPS) tracks vertical jolts, harsh braking, and sharp cornering. 
 
-    Contextual Analytics: By cross-referencing telemetry across multiple vehicles, we map the physical reality of the route. If one truck registers erratic lateral shifts, it is flagged as aggressive driving. If ten trucks register a severe vertical impact at the exact same GPS coordinate, it is mapped as an environmental cause. 
+Contextual Analytics: By cross-referencing telemetry across multiple vehicles, we map the physical reality of the route. If one truck registers erratic lateral shifts, it is flagged as aggressive driving. If ten trucks register a severe vertical impact at the exact same GPS coordinate, it is mapped as an environmental cause. 
 
-    Crowdsourcing Infrastructure: We turn existing delivery fleets into active, real-time road quality scanners without requiring expensive surveying equipment. 
+Crowdsourcing Infrastructure: We turn existing delivery fleets into active, real-time road quality scanners without requiring expensive surveying equipment. 
 
 ## Core Outcomes
 
