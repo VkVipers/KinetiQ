@@ -4,10 +4,11 @@ Demo: https://kineti-q-hutb.vercel.app/delivery/be6fbe83/analytics
 <img width="1865" height="991" alt="image" src="https://github.com/user-attachments/assets/a613dc7d-fd3f-44f7-913d-024239b87858" />
 
 Context-Aware Fleet Tracking for Optimal Routing and Driver Evaluation 
-💡 The Problem
+## The Problem
 
 Right now, most tracking systems can only tell you if your goods got bumped during a trip, leaving out the most important part: the cause. Was the driver being careless, or was it just a terrible road? This lack of context leads to high financial losses from cargo damage and the unfair penalization of safe drivers for unavoidable road hazards. 
-🚀 Our Solution
+
+## Our Solution
 
 KinetiQ deploys an intelligent telematics system that combines edge IoT data with fleet-wide cloud analytics to separate road-induced anomalies from driver-induced anomalies. We are moving the industry away from absolute metrics to contextual accountability. 
 How it Works: The Mechanism
@@ -18,13 +19,13 @@ How it Works: The Mechanism
 
     Crowdsourcing Infrastructure: We turn existing delivery fleets into active, real-time road quality scanners without requiring expensive surveying equipment. 
 
-✨ Core Outcomes
+## Core Outcomes
 
     Cargo-Aware Dynamic Routing: We match the route to the freight. Fragile shipments are directed along paths with the lowest historical "jitter scores," while durable goods take the fastest available paths. 
 
     The Driver Trust Network: We generate a "Driver Reliability Score" based strictly on preventable actions (e.g., sudden braking on a known smooth road). This provides fine-grained, fair analytics to streamline hiring, reduce turnover, and reward good driving. 
 
-🛠️ Technology Stack
+## Technology Stack
 
     Hardware / Edge: Microcontroller (ESP32), 6-axis IMU, GPS Module, Camera Module 
 
