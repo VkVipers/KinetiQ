@@ -113,5 +113,5 @@ Built together at the DP World Hackathon, April 2026.
 - Shriyam Avasthi - [@Shriyam-Avasthi](https://github.com/Shriyam-Avasthi)
 - Akarsh Jain - [@Akarsh-09](https://github.com/Akarsh-09)
 - Archit Jindal - [@Archie0099](https://github.com/Archie0099)
-- Atchyut Bhallamudi - [@atchyutbhallamudi](https://github.com/atchyutbhallamudi)
+- Sai Atchyut Bhallamudi - [@atchyutbhallamudi](https://github.com/atchyutbhallamudi)
 - Vikranth Reddy - [@Vik217](https://github.com/Vik217)
