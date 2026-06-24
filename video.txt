@@ -1,3 +1,0 @@
-video = https://drive.google.com/file/d/1FWZgvvy2M3IS7dlfhuthK8ci1dofduDa/view?usp=sharing
-
-ppt = https://docs.google.com/presentation/d/1KJlFVj2gK2clvJ_tfr2qGs5vx9sExIkk/edit?usp=share_link&ouid=111073206144467350718&rtpof=true&sd=true
